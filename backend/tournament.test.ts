@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import ChatManager from '../classes/ChatManager.js';
-import { Tournament } from '../classes/Tournament.js';
-import { joinTournamentRoom, tournamentRoom } from '../state/tournamentRoom.js';
-import { gameEvents } from '../events/gameEvents.js';
-import { connectedRoomInstance } from '../state/connectedRoom.js';
+import ChatManager from '../src/classes/ChatManager';
+import { Tournament } from '../src/classes/Tournament';
+import { gameEvents } from '../src/events/gameEvents';
+import { connectedRoomInstance } from '../src/state/connectedRoom';
+import { joinTournamentRoom, tournamentRoom } from '../src/state/tournamentRoom';
 
 // Mock WebSocket
 class MockSocket {
@@ -16,37 +16,37 @@ class MockSocket {
 vi.useFakeTimers();
 
 const PlayerMock = [{
-    id: 'player1',
+    id: 1,
     socket: new MockSocket(),
     status: 'CONNECT_ROOM',
     matchId: '',
     name: 'Player 1',
     tournamentId: undefined,
-    chat: new ChatManager("player1")
+    chat: new ChatManager(1, "Player 1")
 }, {
-    id: 'player2',
+    id: 2,
     socket: new MockSocket(),
     status: 'CONNECT_ROOM',
     matchId: '',
     name: 'Player 2',
     tournamentId: undefined,
-    chat: new ChatManager("player2")
+    chat: new ChatManager(2, "Player 2")
 }, {
-    id: 'player3',
+    id: 3,
     socket: new MockSocket(),
     status: 'CONNECT_ROOM',
     matchId: '',
     name: 'Player 3',
     tournamentId: undefined,
-    chat: new ChatManager("player3")
+    chat: new ChatManager(3, "Player 3")
 }, {
-    id: 'player4',
+    id: 4,
     socket: new MockSocket(),
     status: 'CONNECT_ROOM',
     matchId: '',
     name: 'Player 4',
     tournamentId: undefined,
-    chat: new ChatManager("player4")
+    chat: new ChatManager(4, "Player 4")
 }]
 
 describe('Tournament Game', () => {
@@ -64,12 +64,11 @@ describe('Tournament Game', () => {
         socket3 = new MockSocket();
         socket4 = new MockSocket();
 
-        connectedRoomInstance.addUser('player1');   
-        connectedRoomInstance.addUser('player2');
-        connectedRoomInstance.addUser('player3');
-        connectedRoomInstance.addUser('player4');
+        connectedRoomInstance.addUser('player1', socket1 as any);
+        connectedRoomInstance.addUser('player2', socket2 as any);
+        connectedRoomInstance.addUser('player3', socket3 as any);
+        connectedRoomInstance.addUser('player4', socket4 as any);
 
-        
     });
 
     it('should start the tournament', async () => {
@@ -79,10 +78,10 @@ describe('Tournament Game', () => {
         joinTournamentRoom('player4');
 
         // Check that players are in TOURNAMENT_ROOM
-        expect(connectedRoomInstance.getById('player1')?.status).toBe('TOURNAMENT_ROOM');
-        expect(connectedRoomInstance.getById('player2')?.status).toBe('TOURNAMENT_ROOM');
-        expect(connectedRoomInstance.getById('player3')?.status).toBe('TOURNAMENT_ROOM');
-        expect(connectedRoomInstance.getById('player4')?.status).toBe('TOURNAMENT_ROOM');
+        expect(connectedRoomInstance.getByName('player1')?.status).toBe('TOURNAMENT_ROOM');
+        expect(connectedRoomInstance.getByName('player2')?.status).toBe('TOURNAMENT_ROOM');
+        expect(connectedRoomInstance.getByName('player3')?.status).toBe('TOURNAMENT_ROOM');
+        expect(connectedRoomInstance.getByName('player4')?.status).toBe('TOURNAMENT_ROOM');
 
         // Check that a tournament has been created
         expect(tournamentRoom.size).toBe(1);
@@ -91,10 +90,10 @@ describe('Tournament Game', () => {
         
         // Check that players have a tournamentId
         
-        expect(connectedRoomInstance.getById('player1')?.tournamentId).toBe(tournamentId);
-        expect(connectedRoomInstance.getById('player2')?.tournamentId).toBe(tournamentId);
-        expect(connectedRoomInstance.getById('player3')?.tournamentId).toBe(tournamentId);
-        expect(connectedRoomInstance.getById('player4')?.tournamentId).toBe(tournamentId);
+        expect(connectedRoomInstance.getByName('player1')?.tournamentId).toBe(tournamentId);
+        expect(connectedRoomInstance.getByName('player2')?.tournamentId).toBe(tournamentId);
+        expect(connectedRoomInstance.getByName('player3')?.tournamentId).toBe(tournamentId);
+        expect(connectedRoomInstance.getByName('player4')?.tournamentId).toBe(tournamentId);
         
         // Simulate tournament progression and check for winner
         gameEvents.emit('tournament_match_end', {
@@ -145,7 +144,7 @@ describe('Tournament Game - Disconnects', () => {
         const players = ['player1', 'player2', 'player3', 'player4'];
         for (const id of players) {
             const socket = new MockSocket();
-            connectedRoomInstance.addUser(id);
+            connectedRoomInstance.addUser(id, socket as any);
         }
     });
 

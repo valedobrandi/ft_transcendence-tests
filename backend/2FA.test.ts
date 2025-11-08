@@ -1,13 +1,13 @@
 // websocket.test.ts
 import { beforeAll, afterAll, describe, it, expect, vi, beforeEach } from 'vitest'
 import WebSocket from 'ws'
-import { fastify } from '../server.js';
-import { connectedRoomInstance } from '../state/connectedRoom.js';
-import { authenticationRoomInstance } from '../state/authenticationRoom.js';
+import { fastify } from '../src/server.js';
 import { waitForMessage } from './utils.js';
 import bcrypt from 'bcrypt';
-import { AuthService } from '../services/authService.js';
-import { UsersModel } from '../models/usersModel.js';
+import { UsersModel } from '../src/models/usersModel.js';
+import { AuthService } from '../src/services/authService.js';
+import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
+import { connectedRoomInstance } from '../src/state/connectedRoom.js';
 
 
 let port: number | null = null;
@@ -22,8 +22,8 @@ beforeAll(async () => {
                 password: "hashed_password_1"
               };
     });
-	// Mock bycrypt
-    vi.spyOn(bcrypt, 'compare').mockResolvedValue(true);
+    // Mock bycrypt
+    vi.spyOn(bcrypt as any, 'compare').mockResolvedValue(true);
 
     vi.spyOn(AuthService.prototype, 'sendEmail').mockResolvedValue({
         data: 'mocked-email-id',
@@ -81,7 +81,7 @@ describe('2FA', () => {
         const message = await waitForMessage(ws, "message", "CONNECT_ROOM");
 
         expect(authenticationRoomInstance.getCode('alice')).toBeUndefined();
-        expect(connectedRoomInstance.getById('alice')).toBeDefined();
+        expect(connectedRoomInstance.getByName('alice')).toBeDefined();
 
     });
 

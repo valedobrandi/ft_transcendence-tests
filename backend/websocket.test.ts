@@ -1,10 +1,10 @@
 // websocket.test.ts
 import { beforeAll, afterAll, describe, it, expect, vi } from 'vitest'
 import WebSocket from 'ws'
-import { fastify } from '../server.js';
-import { connectedRoomInstance } from '../state/connectedRoom.js';
-import { authenticationRoomInstance } from '../state/authenticationRoom.js';
+import { fastify } from '../src/server.js';
 import { waitForMessage } from './utils.js';
+import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
+import { connectedRoomInstance } from '../src/state/connectedRoom.js';
 
 
 let port: number | null = null;
@@ -28,8 +28,8 @@ describe('WebSocket connect/disconnect logic', () => {
 	it('adds client on connection and removes on close', async () => {
 		const ws = new WebSocket(`ws://localhost:${port}/ws`);
 		await new Promise(resolve => ws.once('open', resolve));
-		connectedRoomInstance.addUser('test_client_1');
-		const user = connectedRoomInstance.getById("test_client_1");
+		connectedRoomInstance.addUser('test_client_1', ws as any);
+		const user = connectedRoomInstance.getByName("test_client_1");
 		expect(user).toBeDefined();
 
 		// CONNECT_ROOM should add the client to connectedRoom

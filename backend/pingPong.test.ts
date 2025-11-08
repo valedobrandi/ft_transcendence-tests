@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { PingPong } from '../classes/PingPong.js';
-import { gameRoom } from '../state/gameRoom.js';
-import { connectedRoomInstance } from '../state/connectedRoom.js';
+import { PingPong } from '../src/classes/PingPong';
+import { connectedRoomInstance } from '../src/state/connectedRoom';
+import { gameRoom } from '../src/state/gameRoom';
+
 
 // Mock WebSocket
 class MockSocket  {
@@ -24,8 +25,8 @@ describe('PingPong Game', () => {
         socket1 = new MockSocket();
         socket2 = new MockSocket();
 
-        connectedRoomInstance.addUser('player1');
-        connectedRoomInstance.addUser('player2');
+        connectedRoomInstance.addUser('player1', socket1 as any);
+        connectedRoomInstance.addUser('player2', socket2 as any);
 
 		connectedRoomInstance.addWebsocket('player1', socket1 as any);
 		connectedRoomInstance.addWebsocket('player2', socket2 as any);
@@ -37,8 +38,8 @@ describe('PingPong Game', () => {
     it('should start the match and set players to GAME_ROOM', () => {
         expect(socket1.send).toHaveBeenCalledWith(expect.stringContaining('GAME_ROOM'));
         expect(socket2.send).toHaveBeenCalledWith(expect.stringContaining('GAME_ROOM'));
-        expect(connectedRoomInstance.getById('player1')?.status).toBe('GAME_ROOM');
-        expect(connectedRoomInstance.getById('player2')?.status).toBe('GAME_ROOM');
+        expect(connectedRoomInstance.getByName('player1')?.status).toBe('GAME_ROOM');
+        expect(connectedRoomInstance.getByName('player2')?.status).toBe('GAME_ROOM');
 
         // Verify gameRoom
         expect(gameRoom.size).toBe(1);
@@ -64,8 +65,8 @@ describe('PingPong Game', () => {
         expect(socket2.send).toHaveBeenCalledWith(expect.stringContaining('GAME_OVER'));
 
         // Verify loser returned to CONNECT_ROOM
-        expect(connectedRoomInstance.getById('player2')?.status).toBe('CONNECT_ROOM');
-        expect(connectedRoomInstance.getById('player1')?.status).toBe('CONNECT_ROOM');
+        expect(connectedRoomInstance.getByName('player2')?.status).toBe('CONNECT_ROOM');
+        expect(connectedRoomInstance.getByName('player1')?.status).toBe('CONNECT_ROOM');
     });
 
 });
@@ -81,8 +82,8 @@ describe('PingPong Game - Disconnects', () => {
         socket1 = new MockSocket();
         socket2 = new MockSocket();
 
-        connectedRoomInstance.addUser('player1');
-        connectedRoomInstance.addUser('player2');
+        connectedRoomInstance.addUser('player1', socket1 as any);
+        connectedRoomInstance.addUser('player2', socket2 as any);
 
 		connectedRoomInstance.addWebsocket('player1', socket1 as any);
 		connectedRoomInstance.addWebsocket('player2', socket2 as any);
