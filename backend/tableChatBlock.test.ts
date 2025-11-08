@@ -1,6 +1,6 @@
 // websocket.test.ts
 import { describe, it, expect} from 'vitest'
-import { fastify } from '../server.js';
+import { fastify } from '../src/server.js';
 import { userMock } from './Mock.js';
 
 describe('TABLE CHATBLOCK TEST', () => {

@@ -1,13 +1,13 @@
 // websocket.test.ts
 import { beforeAll, afterAll, describe, it, expect, vi } from 'vitest'
 import WebSocket from 'ws'
-import { fastify } from '../server.js';
-import { connectedRoomInstance } from '../state/connectedRoom.js';
+import { fastify } from '../src/server.js';
 import { waitForMessage } from './utils.js';
-import { gameRoom } from '../state/gameRoom.js';
-import { authenticationRoomInstance } from '../state/authenticationRoom.js';
-import { AuthService } from '../services/authService.js';
-import { UsersModel } from '../models/usersModel.js';
+import { UsersModel } from '../src/models/usersModel.js';
+import { AuthService } from '../src/services/authService.js';
+import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
+import { connectedRoomInstance } from '../src/state/connectedRoom.js';
+import { gameRoom } from '../src/state/gameRoom.js';
 
 let port: number | null = null;
 
@@ -60,14 +60,14 @@ describe('MATCH', () => {
         ws.send(match_request_1);
         response = await waitForMessage(ws, "message", "MATCH_ROOM");
 
-        expect((connectedRoomInstance.getById('test-client-1'))?.status).toBe('MATCH_QUEUE');
+        expect((connectedRoomInstance.getByName('test-client-1'))?.status).toBe('MATCH_QUEUE');
         expect(response.message).toContain("MATCH_ROOM");
 
         ws.send(match_request_2);
         response = await waitForMessage(ws, "message", "GAME_ROOM");
 
-        expect((connectedRoomInstance.getById('test-client-2'))?.status).toBe('GAME_ROOM');
-        expect((connectedRoomInstance.getById('test-client-1'))?.status).toBe('GAME_ROOM');
+        expect((connectedRoomInstance.getByName('test-client-2'))?.status).toBe('GAME_ROOM');
+        expect((connectedRoomInstance.getByName('test-client-1'))?.status).toBe('GAME_ROOM');
         expect(response.message).toContain("GAME_ROOM");
 
         expect(gameRoom.size).toBe(1);

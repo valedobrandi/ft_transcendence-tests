@@ -1,10 +1,11 @@
 // websocket.test.ts
 import WebSocket from 'ws'
 import { describe, it, expect, beforeAll, afterAll} from 'vitest'
-import { fastify, print } from '../server.js';
+import { fastify, print } from '../src/server.js';
 import { chatMessagersMock, userMock } from './Mock.js';
-import db from '../../database/db.js';
-import { MessagesModel } from '../models/messagesModel.js';
+import { MessagesModel } from '../src/models/messagesModel.js';
+import db from '../database/db.js';
+
 
 var port: number | null = null;
 beforeAll(async () => {
