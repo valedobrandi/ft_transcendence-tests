@@ -3,8 +3,12 @@ import WebSocket from 'ws'
 import { describe, it, expect, beforeAll, afterAll} from 'vitest'
 import { fastify, print } from '../src/server.js';
 import { chatMessagersMock, userMock } from './Mock.js';
-import { MessagesModel } from '../src/models/messagesModel.js';
-import { getDatabase } from '../database/db.js';
+import { reset_database } from "./utils.js";
+
+beforeAll(async () => {
+    await reset_database();
+});
+
 
 
 var port: number | null = null;
