@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ChatManager from '../src/classes/ChatManager';
 import { Tournament } from '../src/classes/Tournament';
 import { gameEvents } from '../src/events/gameEvents';
-import { connectedRoomInstance } from '../src/state/connectedRoom';
 import { joinTournamentRoom, tournamentRoom } from '../src/state/tournamentRoom';
+import { connectedRoomInstance } from '../src/state/ConnectedRoom';
 
 // Mock WebSocket
 class MockSocket {

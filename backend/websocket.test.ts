@@ -1,10 +1,11 @@
 // websocket.test.ts
 import { beforeAll, afterAll, describe, it, expect, vi } from 'vitest'
 import WebSocket from 'ws'
-import { fastify } from '../src/server.js';
 import { waitForMessage } from './utils.js';
 import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
-import { connectedRoomInstance } from '../src/state/connectedRoom.js';
+import { connectedRoomInstance } from '../src/state/ConnectedRoom.js';
+import { fastify } from "../src/server.js";
+
 
 
 let port: number | null = null;

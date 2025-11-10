@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { PingPong } from '../src/classes/PingPong';
-import { connectedRoomInstance } from '../src/state/connectedRoom';
 import { gameRoom } from '../src/state/gameRoom';
+import { connectedRoomInstance } from '../src/state/ConnectedRoom';
 
 
 // Mock WebSocket

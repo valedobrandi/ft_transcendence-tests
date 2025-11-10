@@ -6,8 +6,8 @@ import { waitForMessage } from './utils.js';
 import { UsersModel } from '../src/models/usersModel.js';
 import { AuthService } from '../src/services/authService.js';
 import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
-import { connectedRoomInstance } from '../src/state/connectedRoom.js';
 import { gameRoom } from '../src/state/gameRoom.js';
+import { connectedRoomInstance } from '../src/state/ConnectedRoom.js';
 
 var port: number | null = null;
 

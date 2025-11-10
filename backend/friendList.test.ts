@@ -1,21 +1,19 @@
 import { describe, it, expect, vi, beforeAll } from "vitest";
 import { fastify } from "../src/server.js";
 import { userMock } from "./Mock.js";
-import { createSchema } from "../database/schema.js";
-import { seedUsers } from "../database/seeds/seed_users.js";
 import { connectedRoomInstance } from "../src/state/ConnectedRoom.js";
+import { reset_database } from "./utils.js";
 
 
-function reset_database() {
-    createSchema();
-    seedUsers();
-}
+
+beforeAll(async () => {
+    await reset_database();
+});
 
 describe("FRIEND LIST TEST", () => {
-    reset_database();
     var response;
     fastify.addHook('onRequest', async (request, response) => {
-        request.jwtVerify = async () => ({ userId: userMock["alice"].id });
+        request.jwtVerify = async () => ({ id: userMock["alice"].id });
     });
 
     it("01 - ADD A USER TO THE FRIEND LIST", async () => {

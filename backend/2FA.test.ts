@@ -7,21 +7,21 @@ import bcrypt from 'bcrypt';
 import { UsersModel } from '../src/models/usersModel.js';
 import { AuthService } from '../src/services/authService.js';
 import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
-import { connectedRoomInstance } from '../src/state/connectedRoom.js';
+import { connectedRoomInstance } from '../src/state/ConnectedRoom.js';
 
 
 let port: number | null = null;
 beforeAll(async () => {
     // Mock usersModel findUserByEmailOrUsername
     vi.spyOn(UsersModel.prototype, 'findUserByEmailOrUsername')
-        .mockImplementation((email: string, username: string) => {
+        .mockImplementation((username: string) => {
             return {
                 email: "alice@example.com",
                 username: "alice",
                 twoFA_enabled: true,
                 password: "hashed_password_1"
-              };
-    });
+            };
+        });
     // Mock bycrypt
     vi.spyOn(bcrypt as any, 'compare').mockResolvedValue(true);
 
@@ -69,7 +69,7 @@ describe('2FA', () => {
             body: {
                 username: 'alice',
                 code,
-				id: 4
+                id: 4
             }
         });
 

@@ -1,16 +1,13 @@
 // websocket.test.ts
-import { beforeAll, afterAll, describe, it, expect, vi, beforeEach } from 'vitest'
-import { fastify } from '../server';
-import { fastifyServer } from './utils';
-import { createSchema } from '../../database/schema';
-import { seedUsers } from '../../database/seeds/seed_users';
+import { beforeAll, afterAll, describe, it, expect, vi } from 'vitest'
+import bcrypt from 'bcrypt';
+import { fastify } from "../src/server.js";
+import { reset_database } from './utils.js';
 
-var port: number | null = null;
 
 beforeAll(async () => {
-    await fastify.listen({ port: 0 });
-    const address = fastify.server.address();
-    if (address) port = typeof address === 'string' ? null : address.port;
+vi.spyOn(bcrypt, 'compare').mockResolvedValue(true as any)
+await reset_database();
 });
 
 afterAll(async () => {
@@ -18,8 +15,6 @@ afterAll(async () => {
 });
 
 describe('JWT', async () => {
-    createSchema();
-    seedUsers();
     it('1 - GET JWT', async () => {
         var response;
         // First, create a user to login
@@ -47,19 +42,20 @@ describe('JWT', async () => {
 
         expect(response.statusCode).toBe(201);
 
-        const data = response.json();
-        const { accessToken, username } = data.payload;
-        expect(accessToken).toBeDefined();
-        expect(username).toBe('lola');
+        var { payload } = response.json();
+        //expect(payload).toBe({});
+        expect(payload.accessToken).toBeDefined();
+        expect(payload.username).toBe('lola');
         
         const profileRoute = await fastify.inject({
             method: 'GET',
             url: '/profile',
             headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: `Bearer ${payload.accessToken}`,
             },
         });
-
+        
+        const profilData = profileRoute.json();
         expect(profileRoute.statusCode).toBe(200)
 
     });
