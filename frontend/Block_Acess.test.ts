@@ -12,7 +12,7 @@ describe('Block Acess', () => {
         mockCanvas();
 
         document.body.innerHTML = '<div id="root"></div>';
-        window.history.pushState({}, '', '/login');
+        window.history.pushState({}, '', '/');
 
         // Simulate not logged in
         id.username = '';
@@ -23,8 +23,8 @@ describe('Block Acess', () => {
     it('BLOCK NAVIGATETO /intra', async () => {
         utils.navigateTo('/intra');
 
-        // Expect redirected to /login
-        expect(window.location.pathname).toBe('/login');
+        // Expect redirected to /
+        expect(window.location.pathname).toBe('/');
 
         // Expect alert "You must be logged in to access this page." to be preset
         expect(document.body.innerHTML).toContain('You must be logged in to access this page.');
@@ -34,8 +34,8 @@ describe('Block Acess', () => {
     it('BLOCK NAVIGATETO /match', async () => {
         utils.navigateTo('/match');
 
-        // Expect redirected to /login
-        expect(window.location.pathname).toBe('/login');
+        // Expect redirected to /
+        expect(window.location.pathname).toBe('/');
 
         // Expect alert "You must be logged in to access this page." to be preset
         expect(document.body.innerHTML).toContain('You must be logged in to access this page.');

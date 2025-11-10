@@ -7,7 +7,12 @@ import { connectedRoomInstance } from "../src/state/connectedRoom.js";
 
 describe("TABLE CHATBLOCK TEST", () => {
   it("01 - ADD A USER TO THE BLOCK LIST", async () => {
-    await fastify.inject({
+
+    connectedRoomInstance.addUser(userMock["alice"].username, userMock["alice"].id);
+    // Get Alice's chat manager and add blocked users
+    const alice = connectedRoomInstance.getByName(userMock["alice"].username);
+
+    const response = await fastify.inject({
       method: "POST",
       url: "/block-user",
       body: {
@@ -15,6 +20,9 @@ describe("TABLE CHATBLOCK TEST", () => {
         blockedUserId: userMock["bob"].id,
       },
     });
+
+    expect(response.statusCode).toBe(200);
+    expect(alice?.chat.isUserBlocked(userMock["bob"].id)).toBe(true);
   });
 
   it("02 - GET BLOCKED USERS", async () => {
