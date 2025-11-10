@@ -8,6 +8,11 @@ import { UsersModel } from '../src/models/usersModel.js';
 import { AuthService } from '../src/services/authService.js';
 import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
 import { connectedRoomInstance } from '../src/state/ConnectedRoom.js';
+import { reset_database } from "./utils.js";
+
+beforeAll(async () => {
+    await reset_database();
+});
 
 
 let port: number | null = null;

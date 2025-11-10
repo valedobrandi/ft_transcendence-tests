@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import ChatManager from '../src/classes/ChatManager';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
+import { reset_database } from "./utils.js";
 import { Tournament } from '../src/classes/Tournament';
 import { gameEvents } from '../src/events/gameEvents';
 import { joinTournamentRoom, tournamentRoom } from '../src/state/tournamentRoom';
@@ -15,39 +15,9 @@ class MockSocket {
 
 vi.useFakeTimers();
 
-const PlayerMock = [{
-    id: 1,
-    socket: new MockSocket(),
-    status: 'CONNECT_ROOM',
-    matchId: '',
-    name: 'Player 1',
-    tournamentId: undefined,
-    chat: new ChatManager(1, "Player 1")
-}, {
-    id: 2,
-    socket: new MockSocket(),
-    status: 'CONNECT_ROOM',
-    matchId: '',
-    name: 'Player 2',
-    tournamentId: undefined,
-    chat: new ChatManager(2, "Player 2")
-}, {
-    id: 3,
-    socket: new MockSocket(),
-    status: 'CONNECT_ROOM',
-    matchId: '',
-    name: 'Player 3',
-    tournamentId: undefined,
-    chat: new ChatManager(3, "Player 3")
-}, {
-    id: 4,
-    socket: new MockSocket(),
-    status: 'CONNECT_ROOM',
-    matchId: '',
-    name: 'Player 4',
-    tournamentId: undefined,
-    chat: new ChatManager(4, "Player 4")
-}]
+beforeAll(async () => {
+    await reset_database();
+});
 
 describe('Tournament Game', () => {
     let socket1: MockSocket;

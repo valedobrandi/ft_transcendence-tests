@@ -9,6 +9,13 @@ import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
 import { gameRoom } from '../src/state/gameRoom.js';
 import { connectedRoomInstance } from '../src/state/ConnectedRoom.js';
 
+
+import { reset_database } from "./utils.js";
+
+beforeAll(async () => {
+    await reset_database();
+});
+
 var port: number | null = null;
 
 beforeAll(async () => {
