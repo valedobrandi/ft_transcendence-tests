@@ -1,8 +1,10 @@
 import type { WebSocket } from 'ws';
-import { fastify } from '../server';
-import MatchesModel from '../models/matchesModel';
-import { getDatabase } from '../../database/db';
-import { GameEvents } from '../events/gameEvents';
+import db from '../database/db';
+import { fastify } from "../src/server.js";
+import MatchesModel from '../src/models/matchesModel.js';
+import { GameEvents } from '../src/events/gameEvents.js';
+import { createSchema } from '../database/schema.js';
+import { seedUsers } from '../database/seeds/seed_users.js';
 
 function waitForMessage(ws: WebSocket, field: string, type: string) {
     return new Promise((resolve) => {
@@ -18,11 +20,16 @@ function waitForMessage(ws: WebSocket, field: string, type: string) {
 }
 
 const fastifyServer = async () => {
-    const db = getDatabase();
     await fastify.ready();
     const matchesModel = new MatchesModel(db);
     GameEvents.registerListeners(matchesModel);
     return fastify;
 };
 
-export { waitForMessage, fastifyServer };
+
+async function reset_database() {
+  await createSchema();
+  await seedUsers();
+}
+
+export { waitForMessage, fastifyServer, reset_database };
