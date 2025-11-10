@@ -9,7 +9,7 @@ import { authenticationRoomInstance } from '../src/state/authenticationRoom.js';
 import { connectedRoomInstance } from '../src/state/connectedRoom.js';
 import { gameRoom } from '../src/state/gameRoom.js';
 
-let port: number | null = null;
+var port: number | null = null;
 
 beforeAll(async () => {
     vi.spyOn(authenticationRoomInstance, 'verify').mockReturnValue(true);
@@ -19,8 +19,8 @@ beforeAll(async () => {
 	});
 
     await fastify.listen({ port: 0 });
-    const adress = fastify.server.address();
-    if (adress) port = typeof adress === 'string' ? null : adress.port;
+    const address = fastify.server.address();
+    if (address) port = typeof address === 'string' ? null : address.port;
 });
 
 afterAll(async () => {
